@@ -1,0 +1,91 @@
+# Tipos de respuesta
+type LegendResponse {
+    idLegend: Int!
+    idPlace: Int
+    title: String!
+    story: String!
+    origin: String
+}
+
+# Input para crear/actualizar leyendas
+input LegendRequestInput {
+    title: String!
+    story: String!
+    origin: String
+}
+
+# Tipo para paginación
+type LegendPage {
+    content: [LegendResponse!]!
+    totalElements: Int!
+    totalPages: Int!
+    size: Int!
+    number: Int!
+    first: Boolean!
+    last: Boolean!
+    empty: Boolean!
+}
+
+# Input para configurar paginación
+input PageableInput {
+    page: Int = 0
+    size: Int = 10
+    sort: [String!]
+}
+
+# Queries - Consultas de lectura
+type Query {
+    
+    """
+    Obtiene todas las leyendas sin paginación
+    """
+    getAllLegends: [LegendResponse!]!
+    
+    """
+    Obtiene una leyenda por su ID
+    """
+    getLegendById(id: Int!): LegendResponse
+    
+    """
+    Busca leyendas por nombre del lugar turístico (con paginación)
+    """
+    findByPlaceName(
+        name: String!
+        pageable: PageableInput
+    ): LegendPage!
+    
+    """
+    Busca leyendas por nombre del municipio (con paginación)
+    """
+    findByMunicipalityName(
+        name: String!
+        pageable: PageableInput
+    ): LegendPage!
+    
+    """
+    Busca leyendas por nombre del estado (con paginación)
+    """
+    findByStateName(
+        name: String!
+        pageable: PageableInput
+    ): LegendPage!
+}
+
+# Mutations - Operaciones de escritura
+type Mutation {
+    """
+    Crea una nueva leyenda asociada a un lugar turístico
+    """
+    createLegend(
+        placeId: Int!
+        request: LegendRequestInput!
+    ): LegendResponse!
+    
+    """
+    Actualiza una leyenda existente
+    """
+    updateLegend(
+        id: Int!
+        request: LegendRequestInput!
+    ): LegendResponse!
+}
